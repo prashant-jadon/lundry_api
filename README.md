@@ -191,84 +191,9 @@ Authorization: Bearer <your_jwt_token>
   "message": "Profile not found"
 }
 ```
-
 ---
 
-### 6. **Place Order**
-
-**POST** `/api/order`
-
-**Headers:**  
-`Authorization: Bearer <jwt_token>`
-
-**Request Body:**
-```json
-{
-  "washType": "premium",
-  "items": {
-    "shirt": 2,
-    "pant": 1,
-    "tshirt": 3,
-    "dress": 0,
-    "cottonDress": 1
-  },
-  "pickupSlot": "6–8 AM"
-}
-```
-
-**Success Response (200):**
-```json
-{
-  "message": "Order placed",
-  "order": {
-    "_id": "...",
-    "userId": "...",
-    "washType": "premium",
-    "items": {
-      "shirt": 2,
-      "pant": 1,
-      "tshirt": 3,
-      "dress": 0,
-      "cottonDress": 1
-    },
-    "total": 320,
-    "orderDate": "16-06-2025",
-    "pickupSlot": "6–8 AM",
-    "createdAt": "2025-06-16T12:34:56.789Z",
-    "__v": 0
-  },
-  "total": 320
-}
-```
-
-**Error Response (400):**
-```json
-{
-  "message": "Invalid wash type"
-}
-```
-or
-```json
-{
-  "message": "Items are required"
-}
-```
-or
-```json
-{
-  "message": "Invalid pickup slot"
-}
-```
-or
-```json
-{
-  "message": "User profile not found"
-}
-```
-
----
-
-### 7. **Get All Orders**
+### 6. **Get All Orders**
 
 **GET** `/api/orders`
 
@@ -304,7 +229,7 @@ or
 
 ---
 
-### 8. **Place Order (with Address Details)**
+### 7. **Place Order (with Address Details)**
 
 **POST** `/api/order`
 
