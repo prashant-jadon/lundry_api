@@ -14,7 +14,7 @@ const PRICING = {
 
 // Place Order API
 router.post('/order', authenticateToken, async (req, res) => {
-    const { washType, items, pickupSlot, orderDate } = req.body;
+    const { washType, items, pickupSlot, orderDate, address, city, state, pincode } = req.body;
     const userId = req.user.userId;
 
     // Validate washType
@@ -32,6 +32,11 @@ router.post('/order', authenticateToken, async (req, res) => {
     const allowedSlots = ['6–8 AM', '5–7 PM', 'emergency'];
     if (!allowedSlots.includes(pickupSlot)) {
         return res.status(400).json({ message: 'Invalid pickup slot' });
+    }
+
+    // Validate address fields
+    if (!address || !city || !state || !pincode) {
+        return res.status(400).json({ message: 'Address, city, state, and pincode are required' });
     }
 
     // Format orderDate if not provided
@@ -63,7 +68,11 @@ router.post('/order', authenticateToken, async (req, res) => {
         items,
         total,
         orderDate: formattedDate,
-        pickupSlot
+        pickupSlot,
+        address,
+        city,
+        state,
+        pincode
     });
 
     res.status(200).json({ message: 'Order placed', order, total });

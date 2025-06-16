@@ -304,6 +304,94 @@ or
 
 ---
 
+### 8. **Place Order (with Address Details)**
+
+**POST** `/api/order`
+
+**Headers:**  
+`Authorization: Bearer <jwt_token>`
+
+**Request Body:**
+```json
+{
+  "washType": "premium",
+  "items": {
+    "shirt": 2,
+    "pant": 1,
+    "tshirt": 3,
+    "dress": 0,
+    "cottonDress": 1
+  },
+  "pickupSlot": "6–8 AM",
+  "address": "123 Main Street",
+  "city": "New Delhi",
+  "state": "Delhi",
+  "pincode": "110001"
+}
+```
+
+**Success Response (200):**
+```json
+{
+  "message": "Order placed",
+  "order": {
+    "_id": "...",
+    "userId": "...",
+    "washType": "premium",
+    "items": {
+      "shirt": 2,
+      "pant": 1,
+      "tshirt": 3,
+      "dress": 0,
+      "cottonDress": 1
+    },
+    "total": 320,
+    "orderDate": "16-06-2025",
+    "pickupSlot": "6–8 AM",
+    "address": "123 Main Street",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "pincode": "110001",
+    "createdAt": "2025-06-16T12:34:56.789Z",
+    "__v": 0
+  },
+  "total": 320
+}
+```
+
+**Error Response (400):**
+```json
+{
+  "message": "Address, city, state, and pincode are required"
+}
+```
+or
+```json
+{
+  "message": "Invalid wash type"
+}
+```
+or
+```json
+{
+  "message": "Items are required"
+}
+```
+or
+```json
+{
+  "message": "Invalid pickup slot"
+}
+```
+or
+```json
+{
+  "message": "User profile not found"
+}
+```
+
+---
+
 ## **Notes**
 
 - Always use the JWT token from `/api/signup` or `/api/login` for protected endpoints.
