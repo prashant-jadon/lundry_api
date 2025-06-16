@@ -14,7 +14,7 @@ const PRICING = {
 
 // Place Order API
 router.post('/order', authenticateToken, async (req, res) => {
-    const { washType, items } = req.body;
+    const { washType, items, pickupSlot, orderDate } = req.body;
     const userId = req.user.userId;
 
     // Validate washType
@@ -26,6 +26,19 @@ router.post('/order', authenticateToken, async (req, res) => {
     // Validate items
     if (!items || typeof items !== 'object') {
         return res.status(400).json({ message: 'Items are required' });
+    }
+
+    // Validate pickupSlot
+    const allowedSlots = ['6–8 AM', '5–7 PM', 'emergency'];
+    if (!allowedSlots.includes(pickupSlot)) {
+        return res.status(400).json({ message: 'Invalid pickup slot' });
+    }
+
+    // Format orderDate if not provided
+    let formattedDate = orderDate;
+    if (!formattedDate) {
+        const now = new Date();
+        formattedDate = `${now.getDate().toString().padStart(2, '0')}-${(now.getMonth()+1).toString().padStart(2, '0')}-${now.getFullYear()}`;
     }
 
     // Check if user profile exists by userId
@@ -48,7 +61,9 @@ router.post('/order', authenticateToken, async (req, res) => {
         userId,
         washType,
         items,
-        total // Save total in DB if you want
+        total,
+        orderDate: formattedDate,
+        pickupSlot
     });
 
     res.status(200).json({ message: 'Order placed', order, total });

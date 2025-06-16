@@ -211,7 +211,8 @@ Authorization: Bearer <your_jwt_token>
     "tshirt": 3,
     "dress": 0,
     "cottonDress": 1
-  }
+  },
+  "pickupSlot": "6–8 AM"
 }
 ```
 
@@ -231,6 +232,8 @@ Authorization: Bearer <your_jwt_token>
       "cottonDress": 1
     },
     "total": 320,
+    "orderDate": "16-06-2025",
+    "pickupSlot": "6–8 AM",
     "createdAt": "2025-06-16T12:34:56.789Z",
     "__v": 0
   },
@@ -248,6 +251,12 @@ or
 ```json
 {
   "message": "Items are required"
+}
+```
+or
+```json
+{
+  "message": "Invalid pickup slot"
 }
 ```
 or
@@ -282,6 +291,8 @@ or
         "cottonDress": 1
       },
       "total": 320,
+      "orderDate": "16-06-2025",
+      "pickupSlot": "6–8 AM",
       "createdAt": "2025-06-16T12:34:56.789Z",
       "__v": 0
     }
@@ -297,6 +308,7 @@ or
 
 - Always use the JWT token from `/api/signup` or `/api/login` for protected endpoints.
 - The `total` in order is calculated based on the selected wash type and item quantities.
+- The `orderDate` is in `DD-MM-YYYY` format and `pickupSlot` can be `"6–8 AM"`, `"5–7 PM"`, or `"emergency"`.
 - All endpoints return JSON.
 
 ---

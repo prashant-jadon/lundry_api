@@ -10,9 +10,10 @@ const OrderSchema = new mongoose.Schema({
         tshirt: { type: Number, default: 0 },
         dress: { type: Number, default: 0 },
         cottonDress: { type: Number, default: 0 }
-        // Add more items as needed
     },
     total: { type: Number, default: 0 },
+    orderDate: { type: String }, // e.g., "16-06-2025"
+    pickupSlot: { type: String, enum: ['6–8 AM', '5–7 PM', 'emergency'], required: true },
     createdAt: { type: Date, default: Date.now }
 });
 
