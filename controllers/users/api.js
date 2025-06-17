@@ -31,7 +31,7 @@ router.post('/check-pincode', async (req, res) => {
         return res.status(200).json({ message: 'Service available' });
     } else {
         await NotAvailable.create({ pincode: sanitizedPincode });
-        return res.status(400).json({ message: 'Service not available' });
+        return res.status(200).json({ message: 'Service not available'});
     }
 });
 
