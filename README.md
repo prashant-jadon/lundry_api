@@ -583,8 +583,6 @@ or if not found:
 ## **Security Notes**
 
 - All admin endpoints must use `authenticateToken` and check for `isAdmin: true` in the JWT payload.
-- Never expose sensitive user data (like passwords).
-- Only admins should be able to update pricing, wash types, or view all users/orders.
 
 ---
 
