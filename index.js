@@ -3,6 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const apiRoutes = require('./controllers/users/api');
 const orderRoutes = require('./controllers/users/orderapi');
+const adminRoutes = require('./controllers/admin/admin');
 
 
 const app = express();
@@ -20,6 +21,9 @@ app.use('/api', apiRoutes);
 
 // Use Order routes
 app.use('/api', orderRoutes);
+
+// Use Admin routes
+app.use('/api', adminRoutes);
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
