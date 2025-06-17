@@ -157,6 +157,12 @@ Authorization: Bearer <your_jwt_token>
   "message": "All fields are required"
 }
 ```
+or
+```json
+{
+  "message": "We don't deliver in this pincode"
+}
+```
 
 ---
 

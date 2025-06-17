@@ -58,6 +58,12 @@ router.post('/profile', authenticateToken, async (req, res) => {
         return res.status(400).json({ message: 'All fields are required' });
     }
 
+    // Check if pincode is available in the 'pincodes' collection
+    const foundPincode = await Pincode.findOne({ pincode });
+    if (!foundPincode) {
+        return res.status(400).json({ message: 'We don\'t deliver in this pincode' });
+    }
+
     // Save or update profile by userId
     let profile = await UserProfile.findOneAndUpdate(
         { userId },
