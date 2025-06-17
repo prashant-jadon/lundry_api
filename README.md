@@ -1,6 +1,6 @@
 # CareEase User API
 
-This API provides user authentication, profile management, pincode validation, and laundry order management.
+This API provides user authentication, profile management, pincode validation, laundry order management, and admin management.
 
 ---
 
@@ -22,7 +22,7 @@ Authorization: Bearer <your_jwt_token>
 
 ---
 
-## **Endpoints**
+## **User Endpoints**
 
 ---
 
@@ -96,7 +96,8 @@ Authorization: Bearer <your_jwt_token>
 **Success Response (200):**
 ```json
 {
-  "token": "<jwt_token>"
+  "token": "<jwt_token>",
+  "profileCompleted": true
 }
 ```
 
@@ -326,10 +327,9 @@ or
 
 ---
 
-
-
-
 # CareEase Admin API Documentation
+
+This documentation describes the recommended admin APIs for managing users, orders, pricing, and wash types in the CareEase system.
 
 ---
 
