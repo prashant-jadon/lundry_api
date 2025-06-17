@@ -94,10 +94,31 @@ Authorization: Bearer <your_jwt_token>
 ```
 
 **Success Response (200):**
+- If profile is completed:
 ```json
 {
   "token": "<jwt_token>",
-  "profileCompleted": true
+  "profileCompleted": true,
+  "user": {
+    "_id": "...",
+    "userId": "...",
+    "firstname": "John",
+    "lastname": "Doe",
+    "email": "user@example.com",
+    "phone": "9876543210",
+    "address": "123 Main St",
+    "pincode": "110001",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "__v": 0
+  }
+}
+```
+- If profile is not completed:
+```json
+{
+  "token": "<jwt_token>",
+  "profileCompleted": false
 }
 ```
 
