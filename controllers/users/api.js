@@ -93,7 +93,11 @@ router.post('/login', async (req, res) => {
     const profile = await UserProfile.findOne({ userId: user._id });
     const profileCompleted = !!profile;
 
-    res.status(200).json({ token, profileCompleted });
+    if (profileCompleted) {
+        res.status(200).json({ token, profileCompleted, user: profile });
+    } else {
+        res.status(200).json({ token, profileCompleted });
+    }
 });
 
 // Get Profile API
