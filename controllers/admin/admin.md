@@ -1,3 +1,4 @@
+
 # CareEase Admin API Documentation
 
 This documentation describes the recommended admin APIs for managing users, orders, pricing, and wash types in the CareEase system.
@@ -254,8 +255,6 @@ or if not found:
 ## **Security Notes**
 
 - All admin endpoints must use `authenticateToken` and check for `isAdmin: true` in the JWT payload.
-- Never expose sensitive user data (like passwords).
-- Only admins should be able to update pricing, wash types, or view all users/orders.
 
 ---
 
