@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const apiRoutes = require('./controllers/users/api');
 const orderRoutes = require('./controllers/users/orderapi');
 const adminRoutes = require('./controllers/admin/admin');
+const deliveryRoutes = require('./controllers/delivery/delivery');
 
 
 const app = express();
@@ -24,6 +25,9 @@ app.use('/api', orderRoutes);
 
 // Use Admin routes
 app.use('/api', adminRoutes);
+
+// Use Delivery routes
+app.use('/api', deliveryRoutes);
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {

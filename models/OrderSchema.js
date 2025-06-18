@@ -19,7 +19,16 @@ const OrderSchema = new mongoose.Schema({
     pincode: { type: String, required: true }, 
     orderDate: { type: String }, // e.g., "16-06-2025"
     pickupSlot: { type: String, enum: ['6–8 AM', '5–7 PM', 'emergency'], required: true },
-    createdAt: { type: Date, default: Date.now }
+    status: {
+        type: String,
+        enum: ['Pending', 'Picked Up', 'In Progress', 'Delivered'],
+        default: 'Pending'
+    },
+    createdAt: { type: Date, default: Date.now },
+    deliveryBoyId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
 });
 
 const Order = mongoose.model('Order', OrderSchema);

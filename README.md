@@ -607,16 +607,186 @@ or if not found:
 
 ---
 
-## **Security Notes**
+### 9. **Update Order Status**
 
-- All admin endpoints must use `authenticateToken` and check for `isAdmin: true` in the JWT payload.
+**PUT** `/api/admin/orders/:orderId/status`
+
+**Headers:**
+```
+Authorization: Bearer <admin_jwt_token>
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+  "status": "Delivered"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "Order status updated",
+  "order": {
+    "_id": "...",
+    "status": "Delivered",
+    // ...other order fields
+  }
+}
+```
 
 ---
 
-## **Other Recommendations**
+# CareEase Delivery Boy API
 
-- Implement pagination for large user/order lists.
-- Log all admin actions for audit purposes.
-- Validate all input data.
+This API allows delivery boys to log in, view their assigned orders, and update the delivery status of orders.
+
+---
+
+## **Authentication**
+
+All delivery boy endpoints require a JWT token in the `Authorization` header:
+
+```
+Authorization: Bearer <delivery_boy_jwt_token>
+```
+
+---
+
+## **Endpoints & Examples**
+
+---
+
+### 1. **Delivery Boy Login**
+
+**POST** `/api/delivery/login`
+
+**Request Body:**
+```json
+{
+  "email": "deliveryboy@example.com",
+  "password": "password123"
+}
+```
+
+**Success Response:**
+```json
+{
+  "token": "<delivery_boy_jwt_token>"
+}
+```
+
+**Error Response:**
+```json
+{
+  "message": "Invalid credentials or not a delivery boy"
+}
+```
+
+---
+
+### 2. **Get Assigned Orders**
+
+**GET** `/api/delivery/orders`
+
+**Headers:**
+```
+Authorization: Bearer <delivery_boy_jwt_token>
+```
+
+**Response:**
+```json
+{
+  "orders": [
+    {
+      "_id": "665f4e7e2f8b2c0012a4e123",
+      "userId": "665f4e7e2f8b2c0012a4e124",
+      "washType": "premium",
+      "items": { "shirt": 2, "pant": 1 },
+      "status": "Picked Up",
+      "deliveryBoyId": "665f4e7e2f8b2c0012a4e999"
+      // ...other order fields
+    }
+    // ...more orders
+  ]
+}
+```
+
+---
+
+### 3. **Update Order Status**
+
+**PUT** `/api/delivery/orders/:orderId/status`
+
+**Headers:**
+```
+Authorization: Bearer <delivery_boy_jwt_token>
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+  "status": "Delivered"
+}
+```
+
+**Success Response:**
+```json
+{
+  "message": "Order status updated",
+  "order": {
+    "_id": "665f4e7e2f8b2c0012a4e123",
+    "status": "Delivered"
+    // ...other order fields
+  }
+}
+```
+
+**Error Response:**
+```json
+{
+  "message": "Order not found or not assigned to you"
+}
+```
+or
+```json
+{
+  "message": "Invalid status"
+}
+```
+
+---
+
+## **Admin: View All Delivery Boys**
+
+**GET** `/api/admin/delivery-boys`
+
+**Headers:**
+```
+Authorization: Bearer <admin_jwt_token>
+```
+
+**Response:**
+```json
+[
+  {
+    "_id": "665f4e7e2f8b2c0012a4e999",
+    "email": "deliveryboy@example.com",
+    "createdAt": "2025-06-16T12:34:56.789Z"
+    // ...other user fields
+  }
+  // ...more delivery boys
+]
+```
+
+---
+
+## **Notes**
+
+- Only delivery boys with `isDeliveryBoy: true` can log in and access these endpoints.
+- Orders must have a `deliveryBoyId` field assigned to the delivery boy's user ID.
+- Allowed statuses for update: `"Picked Up"`, `"In Progress"`, `"Delivered"`.
 
 ---

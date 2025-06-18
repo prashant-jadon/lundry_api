@@ -97,4 +97,48 @@ router.delete('/admin/wash-types/:washType', authenticateToken, isAdmin, (req, r
     res.status(404).json({ message: 'Wash type not found' });
 });
 
+// 8. Update Order Status
+router.put('/admin/orders/:orderId/status', authenticateToken, isAdmin, async (req, res) => {
+    const { orderId } = req.params;
+    const { status } = req.body;
+    const allowedStatuses = ['Pending', 'Picked Up', 'In Progress', 'Delivered'];
+    if (!allowedStatuses.includes(status)) {
+        return res.status(400).json({ message: 'Invalid status' });
+    }
+    const order = await Order.findByIdAndUpdate(orderId, { status }, { new: true });
+    if (!order) {
+        return res.status(404).json({ message: 'Order not found' });
+    }
+    res.json({ message: 'Order status updated', order });
+});
+
+// Assign order to a delivery boy
+router.put('/admin/orders/:orderId/assign', authenticateToken, isAdmin, async (req, res) => {
+    const { orderId } = req.params;
+    const { deliveryBoyId } = req.body;
+
+    // Check if delivery boy exists and is a delivery boy
+    const deliveryBoy = await User.findOne({ _id: deliveryBoyId, isDeliveryBoy: true });
+    if (!deliveryBoy) {
+        return res.status(400).json({ message: 'Invalid delivery boy ID' });
+    }
+
+    // Assign the order
+    const order = await Order.findByIdAndUpdate(
+        orderId,
+        { deliveryBoyId },
+        { new: true }
+    );
+    if (!order) {
+        return res.status(404).json({ message: 'Order not found' });
+    }
+    res.json({ message: 'Order assigned to delivery boy', order });
+});
+
+// 9. View All Delivery Boys
+router.get('/admin/delivery-boys', authenticateToken, isAdmin, async (req, res) => {
+    const deliveryBoys = await User.find({ isDeliveryBoy: true }, '-password');
+    res.json(deliveryBoys);
+});
+
 module.exports = router;
