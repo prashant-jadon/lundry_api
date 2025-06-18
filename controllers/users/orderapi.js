@@ -35,11 +35,20 @@ router.post('/order', authenticateToken, async (req, res) => {
         return res.status(400).json({ message: 'Address, city, state, and pincode are required' });
     }
 
-    // Format orderDate if not provided
+    // Format orderDate if not provided, or parse if provided
     let formattedDate = orderDate;
-    if (!formattedDate) {
+    if (orderDate) {
+        // Try to parse date from frontend (e.g., "Thu Jun 26 2025")
+        const parsed = new Date(orderDate);
+        if (!isNaN(parsed)) {
+            formattedDate = `${parsed.getDate().toString().padStart(2, '0')}-${(parsed.getMonth() + 1).toString().padStart(2, '0')}-${parsed.getFullYear()}`;
+        } else {
+            // If parsing fails, fallback to original string
+            formattedDate = orderDate;
+        }
+    } else {
         const now = new Date();
-        formattedDate = `${now.getDate().toString().padStart(2, '0')}-${(now.getMonth()+1).toString().padStart(2, '0')}-${now.getFullYear()}`;
+        formattedDate = `${now.getDate().toString().padStart(2, '0')}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getFullYear()}`;
     }
 
     // Check if user profile exists by userId

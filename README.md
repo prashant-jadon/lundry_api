@@ -262,7 +262,7 @@ or
 
 ---
 
-### 7. **Place Order (with Address Details and Emergency Pickup Option)**
+### 7. **Place Order (with Address Details, Date, and Emergency Pickup Option)**
 
 **POST** `/api/order`
 
@@ -278,6 +278,7 @@ or
     "pant": 1
   },
   "pickupSlot": "emergency",
+  "orderDate": "Thu Jun 26 2025",   // Optional, allows user to book for a future date
   "address": "123 Main Street",
   "city": "New Delhi",
   "state": "Delhi",
@@ -298,7 +299,7 @@ or
       "pant": 1
     },
     "total": 208, // (original total 160 + 30% emergency charge)
-    "orderDate": "18-06-2025",
+    "orderDate": "26-06-2025", // Always stored as DD-MM-YYYY
     "pickupSlot": "emergency",
     "address": "123 Main Street",
     "city": "New Delhi",
@@ -325,6 +326,7 @@ or
 **Note:**  
 - Allowed values for `pickupSlot` are `"6–8 AM"`, `"5–7 PM"`, and `"emergency"`.
 - If `pickupSlot` is `"emergency"`, a 30% extra charge is automatically added to the total price.
+- You can pass `orderDate` as a string like `"Thu Jun 26 2025"` to book for a future date. It will be stored as `"26-06-2025"`. If not provided, today's date is used.
 
 ---
 
