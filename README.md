@@ -257,7 +257,7 @@ or
 
 ---
 
-### 7. **Place Order (with Address Details)**
+### 7. **Place Order (with Address Details and Emergency Pickup Option)**
 
 **POST** `/api/order`
 
@@ -270,12 +270,9 @@ or
   "washType": "premium",
   "items": {
     "shirt": 2,
-    "pant": 1,
-    "tshirt": 3,
-    "dress": 0,
-    "cottonDress": 1
+    "pant": 1
   },
-  "pickupSlot": "6–8 AM",
+  "pickupSlot": "emergency",
   "address": "123 Main Street",
   "city": "New Delhi",
   "state": "Delhi",
@@ -288,60 +285,36 @@ or
 {
   "message": "Order placed",
   "order": {
-    "_id": "...",
-    "userId": "...",
+    "_id": "6660f1e2b7e8e2a1c8a12345",
+    "userId": "665f4e7e2f8b2c0012a4e123",
     "washType": "premium",
     "items": {
       "shirt": 2,
-      "pant": 1,
-      "tshirt": 3,
-      "dress": 0,
-      "cottonDress": 1
+      "pant": 1
     },
-    "total": 320,
-    "orderDate": "16-06-2025",
-    "pickupSlot": "6–8 AM",
+    "total": 208, // (original total 160 + 30% emergency charge)
+    "orderDate": "18-06-2025",
+    "pickupSlot": "emergency",
     "address": "123 Main Street",
     "city": "New Delhi",
     "state": "Delhi",
     "pincode": "110001",
-    "createdAt": "2025-06-16T12:34:56.789Z",
-    "__v": 0
+    "createdAt": "2025-06-18T12:34:56.789Z"
   },
-  "total": 320
+  "total": 208
 }
 ```
 
-**Error Response (400):**
-```json
-{
-  "message": "Address, city, state, and pincode are required"
-}
-```
-or
-```json
-{
-  "message": "Invalid wash type"
-}
-```
-or
-```json
-{
-  "message": "Items are required"
-}
-```
-or
+**Error Response (invalid slot):**
 ```json
 {
   "message": "Invalid pickup slot"
 }
 ```
-or
-```json
-{
-  "message": "User profile not found"
-}
-```
+
+**Note:**  
+- Allowed values for `pickupSlot` are `"6–8 AM"`, `"5–7 PM"`, and `"emergency"`.
+- If `pickupSlot` is `"emergency"`, a 30% extra charge is automatically added to the total price.
 
 ---
 

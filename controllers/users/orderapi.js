@@ -25,9 +25,9 @@ router.post('/order', authenticateToken, async (req, res) => {
     }
 
     // Validate pickupSlot
-    const allowedSlots = ['6–8 AM', '5–7 PM', 'emergency'];
+    const allowedSlots = ["6–8 AM", "5–7 PM", "emergency"];
     if (!allowedSlots.includes(pickupSlot)) {
-        return res.status(400).json({ message: 'Invalid pickup slot' });
+        return res.status(400).json({ message: "Invalid pickup slot" });
     }
 
     // Validate address fields
@@ -55,6 +55,10 @@ router.post('/order', authenticateToken, async (req, res) => {
         if (prices[item]) {
             total += (items[item] || 0) * prices[item];
         }
+    }
+
+    if (pickupSlot === "emergency") {
+        total = Math.round(total * 1.3);
     }
 
     // Create order
