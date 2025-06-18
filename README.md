@@ -1,6 +1,6 @@
 # CareEase User API
 
-This API provides user authentication, profile management, pincode validation, laundry order management, and admin management.
+This API provides user authentication, profile management, pincode validation, laundry order management, payment integration (Razorpay), and admin/delivery management.
 
 ---
 
@@ -247,7 +247,12 @@ or
       "orderDate": "16-06-2025",
       "pickupSlot": "6–8 AM",
       "createdAt": "2025-06-16T12:34:56.789Z",
-      "__v": 0
+      "payment": {
+        "status": "pending",
+        "paymentId": null,
+        "method": "razorpay"
+      }
+      // ...other order fields
     }
     // ...more orders
   ],
@@ -299,7 +304,12 @@ or
     "city": "New Delhi",
     "state": "Delhi",
     "pincode": "110001",
-    "createdAt": "2025-06-18T12:34:56.789Z"
+    "createdAt": "2025-06-18T12:34:56.789Z",
+    "payment": {
+      "status": "pending",
+      "paymentId": null,
+      "method": "razorpay"
+    }
   },
   "total": 208
 }
@@ -318,18 +328,93 @@ or
 
 ---
 
+### 8. **Create Razorpay Order (Payment Integration)**
+
+**POST** `/api/create-razorpay-order`
+
+**Headers:**  
+`Authorization: Bearer <jwt_token>`  
+`Content-Type: application/json`
+
+**Request Body:**
+```json
+{
+  "orderId": "6660f1e2b7e8e2a1c8a12345"
+}
+```
+
+**Success Response:**
+```json
+{
+  "orderId": "6660f1e2b7e8e2a1c8a12345",
+  "razorpayOrderId": "order_Lv1234567890",
+  "amount": 20800,
+  "currency": "INR"
+}
+```
+
+**Error Response:**
+```json
+{
+  "message": "Order not found"
+}
+```
+or
+```json
+{
+  "message": "Order already paid"
+}
+```
+
+---
+
+### 9. **Verify Razorpay Payment**
+
+**POST** `/api/verify-razorpay-payment`
+
+**Headers:**  
+`Authorization: Bearer <jwt_token>`  
+`Content-Type: application/json`
+
+**Request Body:**
+```json
+{
+  "orderId": "6660f1e2b7e8e2a1c8a12345",
+  "razorpay_payment_id": "pay_Lv1234567890",
+  "razorpay_order_id": "order_Lv1234567890",
+  "razorpay_signature": "generated_signature"
+}
+```
+
+**Success Response:**
+```json
+{
+  "message": "Payment verified and order marked as paid"
+}
+```
+
+**Error Response:**
+```json
+{
+  "message": "Invalid payment signature"
+}
+```
+
+---
+
 ## **Notes**
 
 - Always use the JWT token from `/api/signup` or `/api/login` for protected endpoints.
 - The `total` in order is calculated based on the selected wash type and item quantities.
 - The `orderDate` is in `DD-MM-YYYY` format and `pickupSlot` can be `"6–8 AM"`, `"5–7 PM"`, or `"emergency"`.
 - All endpoints return JSON.
+- Payment status (`pending` or `paid`) and method (`razorpay`) are included in all order responses.
 
 ---
 
 # CareEase Admin API Documentation
 
-This documentation describes the recommended admin APIs for managing users, orders, pricing, and wash types in the CareEase system.
+This documentation describes the recommended admin APIs for managing users, orders, pricing, wash types, delivery boys, and payment status.
 
 ---
 
@@ -430,7 +515,12 @@ Authorization: Bearer <admin_jwt_token>
     "city": "New Delhi",
     "state": "Delhi",
     "pincode": "110001",
-    "createdAt": "2025-06-16T12:34:56.789Z"
+    "createdAt": "2025-06-16T12:34:56.789Z",
+    "payment": {
+      "status": "paid",
+      "paymentId": "pay_Lv1234567890",
+      "method": "razorpay"
+    }
   }
   // ...more orders
 ]
@@ -611,6 +701,74 @@ Content-Type: application/json
 
 ---
 
+### 10. **Assign Order to Delivery Boy**
+
+**PUT** `/api/admin/orders/:orderId/assign`
+
+**Headers:**
+```
+Authorization: Bearer <admin_jwt_token>
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+  "deliveryBoyId": "665f4e7e2f8b2c0012a4e999"
+}
+```
+
+**Success Response:**
+```json
+{
+  "message": "Order assigned to delivery boy",
+  "order": {
+    "_id": "6660f1e2b7e8e2a1c8a12345",
+    "deliveryBoyId": "665f4e7e2f8b2c0012a4e999"
+    // ...other order fields
+  }
+}
+```
+
+**Error Response:**
+```json
+{
+  "message": "Invalid delivery boy ID"
+}
+```
+or
+```json
+{
+  "message": "Order not found"
+}
+```
+
+---
+
+### 11. **View All Delivery Boys**
+
+**GET** `/api/admin/delivery-boys`
+
+**Headers:**
+```
+Authorization: Bearer <admin_jwt_token>
+```
+
+**Response:**
+```json
+[
+  {
+    "_id": "665f4e7e2f8b2c0012a4e999",
+    "email": "deliveryboy@example.com",
+    "createdAt": "2025-06-16T12:34:56.789Z"
+    // ...other user fields
+  }
+  // ...more delivery boys
+]
+```
+
+---
+
 # CareEase Delivery Boy API
 
 This API allows delivery boys to log in, view their assigned orders, and update the delivery status of orders.
@@ -678,7 +836,12 @@ Authorization: Bearer <delivery_boy_jwt_token>
       "washType": "premium",
       "items": { "shirt": 2, "pant": 1 },
       "status": "Picked Up",
-      "deliveryBoyId": "665f4e7e2f8b2c0012a4e999"
+      "deliveryBoyId": "665f4e7e2f8b2c0012a4e999",
+      "payment": {
+        "status": "paid",
+        "paymentId": "pay_Lv1234567890",
+        "method": "razorpay"
+      }
       // ...other order fields
     }
     // ...more orders
@@ -732,34 +895,11 @@ or
 
 ---
 
-## **Admin: View All Delivery Boys**
-
-**GET** `/api/admin/delivery-boys`
-
-**Headers:**
-```
-Authorization: Bearer <admin_jwt_token>
-```
-
-**Response:**
-```json
-[
-  {
-    "_id": "665f4e7e2f8b2c0012a4e999",
-    "email": "deliveryboy@example.com",
-    "createdAt": "2025-06-16T12:34:56.789Z"
-    // ...other user fields
-  }
-  // ...more delivery boys
-]
-```
-
----
-
 ## **Notes**
 
 - Only delivery boys with `isDeliveryBoy: true` can log in and access these endpoints.
 - Orders must have a `deliveryBoyId` field assigned to the delivery boy's user ID.
 - Allowed statuses for update: `"Picked Up"`, `"In Progress"`, `"Delivered"`.
+- Payment status and method are visible to users, admins, and delivery boys.
 
 ---

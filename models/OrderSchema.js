@@ -29,6 +29,11 @@ const OrderSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
+    payment: {
+        status: { type: String, enum: ['pending', 'paid'], default: 'pending' },
+        paymentId: { type: String, default: null }, // Stripe payment intent ID
+        method: { type: String, default: 'stripe' }
+    },
 });
 
 const Order = mongoose.model('Order', OrderSchema);

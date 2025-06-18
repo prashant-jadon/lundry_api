@@ -72,7 +72,12 @@ router.post('/order', authenticateToken, async (req, res) => {
         address,
         city,
         state,
-        pincode
+        pincode,
+        payment: {
+            status: 'pending',
+            paymentId: null,
+            method: 'razorpay'
+        }
     });
 
     res.status(200).json({ message: 'Order placed', order, total });
