@@ -40,7 +40,7 @@ router.post('/verify-razorpay-payment', authenticateToken, async (req, res) => {
     const { orderId, razorpay_payment_id, razorpay_order_id, razorpay_signature } = req.body;
 
     // Generate expected signature
-    const generated_signature = crypto.createHmac('sha256', 'YOUR_RAZORPAY_KEY_SECRET')
+    const generated_signature = crypto.createHmac('sha256', razorpay.key_secret)
         .update(razorpay_order_id + "|" + razorpay_payment_id)
         .digest('hex');
 
