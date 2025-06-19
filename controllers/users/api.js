@@ -5,6 +5,7 @@ const { Pincode } = require('../../models/PincodeSchema');
 const { User } = require('../../models/Users');
 const { UserProfile } = require('../../models/UserProfile');
 const { NotAvailable } = require('../../models/NotAvailableSchema');
+const pricing = require('../../models/pricing');
 const authenticateToken = require('../../middleware/auth'); 
 
 
@@ -108,6 +109,11 @@ router.get('/profile', authenticateToken, async (req, res) => {
         return res.status(404).json({ message: 'Profile not found' });
     }
     res.status(200).json({ profile });
+});
+
+// Get Pricing (for users)
+router.get('/pricing', async (req, res) => {
+    res.json(pricing.getPricing());
 });
 
 module.exports = router;

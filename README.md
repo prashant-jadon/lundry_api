@@ -487,6 +487,25 @@ or
 
 ---
 
+### 13. **Get Pricing (for Users)**
+
+**GET** `/api/pricing`
+
+**Success Response:**
+```json
+{
+  "standard":   { "shirt": 30, "pant": 40, "tshirt": 25, "dress": 50, "cottonDress": 60 },
+  "premium":    { "shirt": 50, "pant": 60, "tshirt": 40, "dress": 80, "cottonDress": 100 },
+  "dry cleaning": { "shirt": 80, "pant": 90, "tshirt": 70, "dress": 120, "cottonDress": 140 },
+  "delicate":   { "shirt": 100, "pant": 110, "tshirt": 90, "dress": 150, "cottonDress": 170 }
+}
+```
+
+**Description:**  
+This endpoint allows any user to view the current pricing for all wash types and items.
+
+---
+
 ## **Notes**
 
 - Always use the JWT token from `/api/signup` or `/api/login` for protected endpoints.
