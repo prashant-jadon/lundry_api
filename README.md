@@ -404,6 +404,89 @@ or
 
 ---
 
+### 10. **Logout**
+
+**POST** `/api/logout`
+
+**Headers:**  
+`Authorization: Bearer <jwt_token>`
+
+**Success Response (200):**
+```json
+{
+  "message": "Logged out successfully"
+}
+```
+
+---
+
+### 11. **Delete Account**
+
+**DELETE** `/api/delete-account`
+
+**Headers:**  
+`Authorization: Bearer <jwt_token>`
+
+**Success Response (200):**
+```json
+{
+  "message": "Account deleted successfully"
+}
+```
+
+**Error Response (404):**
+```json
+{
+  "message": "User not found"
+}
+```
+
+---
+
+### 12. **Contact Us**
+
+**POST** `/api/contact-us`
+
+**Request Body:**
+```json
+{
+  "firstname": "John",
+  "lastname": "Doe",
+  "email": "john@example.com",
+  "message": "I have a question about your service."
+}
+```
+
+**Success Response (200):**
+```json
+{
+  "message": "Thank you for contacting us. We will get back to you soon."
+}
+```
+
+**Error Response (400):**
+```json
+{
+  "message": "All fields are required"
+}
+```
+
+**Error Response (500):**
+```json
+{
+  "message": "Something went wrong. Please try again later."
+}
+```
+
+---
+
+**Notes:**
+- This endpoint allows users to send a message to the CareEase team.
+- All fields are required.
+- The message is stored in the database for admin review.
+
+---
+
 ## **Notes**
 
 - Always use the JWT token from `/api/signup` or `/api/login` for protected endpoints.

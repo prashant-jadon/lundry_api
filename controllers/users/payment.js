@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const { Order } = require('../../models/OrderSchema');
 const authenticateToken = require('../../middleware/auth');
@@ -6,8 +7,8 @@ const crypto = require('crypto');
 
 const router = express.Router();
 const razorpay = new Razorpay({
-    key_id: 'rzp_test_WfUxFAF7QPNA2b',
-    key_secret: 'IFhKy2mXFTcOQq0Z6EU7hguI'
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
 router.post('/create-razorpay-order', authenticateToken, async (req, res) => {

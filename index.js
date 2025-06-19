@@ -6,6 +6,8 @@ const orderRoutes = require('./controllers/users/orderapi');
 const adminRoutes = require('./controllers/admin/admin');
 const deliveryRoutes = require('./controllers/delivery/delivery');
 const paymentRoutes = require('./controllers/users/payment');
+const contactRoutes = require('./controllers/users/contact');
+require('dotenv').config();
 
 
 const app = express();
@@ -32,6 +34,9 @@ app.use('/api', deliveryRoutes);
 
 // Use Payment routes
 app.use('/api', paymentRoutes);
+
+// Use Contact routes
+app.use('/api', contactRoutes);
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
