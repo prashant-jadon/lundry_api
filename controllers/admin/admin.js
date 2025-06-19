@@ -38,8 +38,8 @@ router.post('/admin/login', async (req, res) => {
 
 // 1. View All Users
 router.get('/admin/users', authenticateToken, isAdmin, async (req, res) => {
-    // Exclude users where isAdmin is true
-    const users = await User.find({ isAdmin: { $ne: true } }, '-password');
+    // Exclude users where isAdmin or isDeliveryBoy is true
+    const users = await User.find({ isAdmin: { $ne: true }, isDeliveryBoy: { $ne: true } }, '-password');
     res.json(users);
 });
 
@@ -139,6 +139,17 @@ router.put('/admin/orders/:orderId/assign', authenticateToken, isAdmin, async (r
 router.get('/admin/delivery-boys', authenticateToken, isAdmin, async (req, res) => {
     const deliveryBoys = await User.find({ isDeliveryBoy: true }, '-password');
     res.json(deliveryBoys);
+});
+
+// View a user's full profile by userId (admin only)
+router.get('/admin/user-profile/:userId', authenticateToken, isAdmin, async (req, res) => {
+    const { userId } = req.params;
+    const user = await User.findOne({ _id: userId, isAdmin: { $ne: true }, isDeliveryBoy: { $ne: true } }, '-password');
+    const profile = await UserProfile.findOne({ userId });
+    if (!user || !profile) {
+        return res.status(404).json({ message: 'User or profile not found' });
+    }
+    res.json({ user, profile });
 });
 
 module.exports = router;
