@@ -90,6 +90,14 @@ router.post('/login', async (req, res) => {
     }
     const token = jwt.sign({ userId: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
 
+    // Set token in cookie for Next.js (httpOnly, secure in production)
+    res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 1000 // 1 hour
+    });
+
     // Check if profile exists
     const profile = await UserProfile.findOne({ userId: user._id });
     const profileCompleted = !!profile;

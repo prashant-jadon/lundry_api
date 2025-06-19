@@ -100,17 +100,7 @@ Authorization: Bearer <your_jwt_token>
   "token": "<jwt_token>",
   "profileCompleted": true,
   "user": {
-    "_id": "...",
-    "userId": "...",
-    "firstname": "John",
-    "lastname": "Doe",
-    "email": "user@example.com",
-    "phone": "9876543210",
-    "address": "123 Main St",
-    "pincode": "110001",
-    "city": "New Delhi",
-    "state": "Delhi",
-    "__v": 0
+    // ...profile fields...
   }
 }
 ```
@@ -121,6 +111,10 @@ Authorization: Bearer <your_jwt_token>
   "profileCompleted": false
 }
 ```
+
+**Notes:**
+- On successful login, the JWT token is returned in the response **and** set as an HTTP-only cookie named `token` (compatible with Next.js).
+- The cookie is secure in production and uses `SameSite: Lax`.
 
 **Error Response (400):**
 ```json

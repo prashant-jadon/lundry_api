@@ -6,6 +6,7 @@ const authenticateToken = require('../../middleware/auth');
 const pricing = require('../../models/pricing');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const DeliveryBoyProfile = require('../../models/DeliveryBoyProfile');
 
 // Middleware to check admin
 function isAdmin(req, res, next) {
@@ -144,12 +145,39 @@ router.get('/admin/delivery-boys', authenticateToken, isAdmin, async (req, res) 
 // View a user's full profile by userId (admin only)
 router.get('/admin/user-profile/:userId', authenticateToken, isAdmin, async (req, res) => {
     const { userId } = req.params;
+    if (!userId || userId === 'undefined') {
+        return res.status(400).json({ message: 'Invalid or missing userId parameter' });
+    }
     const user = await User.findOne({ _id: userId, isAdmin: { $ne: true }, isDeliveryBoy: { $ne: true } }, '-password');
     const profile = await UserProfile.findOne({ userId });
     if (!user || !profile) {
         return res.status(404).json({ message: 'User or profile not found' });
     }
     res.json({ user, profile });
+});
+
+// Create or update delivery boy profile (admin only, separate collection)
+router.post('/admin/delivery-boy-profile', authenticateToken, isAdmin, async (req, res) => {
+    const { userId, firstname, lastname, email, phone, address, pincode, city, state } = req.body;
+
+    if (!userId || !firstname || !lastname || !email || !phone || !address || !pincode || !city || !state) {
+        return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    // Check if user exists and is a delivery boy
+    const user = await User.findOne({ _id: userId, isDeliveryBoy: true });
+    if (!user) {
+        return res.status(404).json({ message: 'Delivery boy not found' });
+    }
+
+    // Save or update delivery boy profile in its own collection
+    const profile = await DeliveryBoyProfile.findOneAndUpdate(
+        { userId },
+        { userId, firstname, lastname, email, phone, address, pincode, city, state },
+        { upsert: true, new: true }
+    );
+
+    res.status(200).json({ message: 'Delivery boy profile saved', profile });
 });
 
 module.exports = router;
