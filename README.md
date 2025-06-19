@@ -889,7 +889,13 @@ Authorization: Bearer <delivery_boy_jwt_token>
 **Success Response:**
 ```json
 {
-  "token": "<delivery_boy_jwt_token>"
+  "token": "<delivery_boy_jwt_token>",
+  "user": {
+    "_id": "665f4e7e2f8b2c0012a4e999",
+    "email": "deliveryboy@example.com",
+    "isDeliveryBoy": true,
+    // ...other user fields except password
+  }
 }
 ```
 

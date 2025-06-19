@@ -22,7 +22,9 @@ router.post('/delivery/login', async (req, res) => {
         'your_jwt_secret',
         { expiresIn: '1h' }
     );
-    res.status(200).json({ token });
+    // Exclude password from user object in response
+    const { password: _, ...userData } = user.toObject();
+    res.status(200).json({ token, user: userData });
 });
 
 // Middleware to check delivery boy
