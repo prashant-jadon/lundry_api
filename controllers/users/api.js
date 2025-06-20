@@ -47,6 +47,13 @@ router.post('/signup', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     user = await User.create({ email, password: hashedPassword });
     const token = jwt.sign({ userId: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
+    res.cookie('token', token, {
+  httpOnly: true,
+  secure: true,
+  sameSite: 'none',
+  path: '/',
+  maxAge: 3600000 // 1 hour
+});
     res.status(200).json({ token });
 });
 

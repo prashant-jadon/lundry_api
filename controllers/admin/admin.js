@@ -50,10 +50,10 @@ router.get('/admin/user-profiles', authenticateToken, isAdmin, async (req, res) 
     res.json(profiles);
 });
 
-// 3. View All Orders
+// 3. View All Orders (admin only, show only paid orders)
 router.get('/admin/orders', authenticateToken, isAdmin, async (req, res) => {
     const { washType, city, state, date, userId } = req.query;
-    let filter = {};
+    let filter = { 'payment.status': 'paid' }; // Only show paid orders
     if (washType) filter.washType = washType;
     if (city) filter.city = city;
     if (state) filter.state = state;
