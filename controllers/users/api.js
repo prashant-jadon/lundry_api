@@ -93,7 +93,7 @@ router.post('/login', async (req, res) => {
     // Set token in cookie for Next.js (httpOnly, secure in production)
 res.cookie('token', token, {
     httpOnly: true,
-    secure: true, // required for SameSite=None
+    secure: false, // required for SameSite=None
     sameSite: 'none', // allow cross-site
     domain: '.vercel.app', // or your custom domain
     path: '/',
