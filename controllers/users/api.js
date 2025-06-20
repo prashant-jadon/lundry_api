@@ -100,6 +100,7 @@ res.cookie('token', token, {
 });
 
 res.setHeader('Access-Control-Allow-Credentials', 'true');
+//res.setHeader('Access-Control-Allow-Origin', 'https://careease-laundary.vercel.app'); // Replace with your frontend domain
 
 
 
@@ -133,10 +134,11 @@ router.get('/pricing', async (req, res) => {
 // Logout API
 router.post('/logout', (req, res) => {
     res.clearCookie('token', {
-         httpOnly: false,
-    secure: true, // required for SameSite=None
-    sameSite: 'none', // allow cross-site
-    path: '/',
+        httpOnly: true,
+  secure: true,
+  sameSite: 'none',
+  path: '/',
+  maxAge: 3600000 
     });
     res.status(200).json({ message: 'Logged out successfully' });
 });
