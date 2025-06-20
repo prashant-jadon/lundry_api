@@ -95,7 +95,6 @@ res.cookie('token', token, {
     httpOnly: true,
     secure: true, // required for SameSite=None
     sameSite: 'none', // allow cross-site
-    domain: '.vercel.app', // or your custom domain
     path: '/',
   });
 
@@ -131,7 +130,7 @@ router.post('/logout', (req, res) => {
          httpOnly: true,
     secure: true, // required for SameSite=None
     sameSite: 'none', // allow cross-site
-    domain: '.vercel.app', // or your custom domain
+   
     path: '/',
     });
     res.status(200).json({ message: 'Logged out successfully' });
