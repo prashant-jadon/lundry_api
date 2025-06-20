@@ -129,16 +129,16 @@ router.get('/pricing', async (req, res) => {
 });
 
 
-// Logout API
-router.post('/logout', (req, res) => {
-    res.clearCookie('token', {
-         httpOnly: false,
-    secure: true, // required for SameSite=None
-    sameSite: 'none', // allow cross-site
+// // Logout API
+// router.post('/logout', (req, res) => {
+//     res.clearCookie('token', {
+//          httpOnly: false,
+//     secure: true, // required for SameSite=None
+//     sameSite: 'none', // allow cross-site
    
-    path: '/',
-    });
-    res.status(200).json({ message: 'Logged out successfully' });
-});
+//     path: '/',
+//     });
+//     res.status(200).json({ message: 'Logged out successfully' });
+// });
 
 module.exports = router;
