@@ -11,8 +11,16 @@ require('dotenv').config();
 
 
 const app = express();
-app.use(cors());
+const cookieParser = require('cookie-parser');
+
+// app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000', // or whatever your frontend is
+  credentials: true               // ⬅️ Needed to allow cookies
+}));
+
 app.use(express.json());
+app.use(cookieParser())
 
 // MongoDB connection
 mongoose.connect('mongodb+srv://prashant:prashant@cluster0.zktg0fy.mongodb.net/', {
