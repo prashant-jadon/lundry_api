@@ -92,10 +92,11 @@ router.post('/login', async (req, res) => {
 
     // Set token in cookie for Next.js (httpOnly, secure in production)
 res.cookie('token', token, {
-  httpOnly: false,
+  httpOnly: true,
   secure: true,
   sameSite: 'none',
   path: '/',
+  maxAge: 3600000 // 1 hour
 });
 
 res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -135,7 +136,6 @@ router.post('/logout', (req, res) => {
          httpOnly: false,
     secure: true, // required for SameSite=None
     sameSite: 'none', // allow cross-site
-   
     path: '/',
     });
     res.status(200).json({ message: 'Logged out successfully' });
