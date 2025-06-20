@@ -15,19 +15,7 @@ const cookieParser = require('cookie-parser');
 
 // app.use(cors());
 app.use(cors({
-  origin: (origin, callback) => {
-    // Allow all vercel.app subdomains and localhost for dev
-    if (
-      !origin ||
-      origin.endsWith('.vercel.app') ||
-      origin === 'http://localhost:3000' ||
-      origin === 'http://localhost:4000'
-    ) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: ['http://localhost:3000', 'https://careease-laundary.vercel.app/'], // ⬅️ Replace with your frontend URL
   credentials: true               // ⬅️ Needed to allow cookies
 }));
 
