@@ -92,12 +92,13 @@ router.post('/order', authenticateToken, async (req, res) => {
     res.status(200).json({ message: 'Order placed', order, total });
 });
 
-// Get Orders by User ID
+// Get Orders by User ID (only show paid orders)
 router.get('/orders', authenticateToken, async (req, res) => {
     const userId = req.user.userId;
-    const orders = await Order.find({ userId });
+    // Only fetch orders where payment.status is 'paid'
+    const orders = await Order.find({ userId, 'payment.status': 'paid' });
 
-    // Calculate grand total for all orders
+    // Calculate grand total for all paid orders
     const total = orders.reduce((sum, order) => sum + (order.total || 0), 0);
 
     res.status(200).json({ orders, total });
