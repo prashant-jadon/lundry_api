@@ -91,12 +91,13 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign({ userId: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
 
     // Set token in cookie for Next.js (httpOnly, secure in production)
-res.cookie('token', token, {
-    httpOnly: true,
-    secure: true, // required for SameSite=None
-    sameSite: 'none', // allow cross-site
-    path: '/',
-  });
+   res.cookie('token', token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  path: '/',
+});
+
 
     // Check if profile exists
     const profile = await UserProfile.findOne({ userId: user._id });
