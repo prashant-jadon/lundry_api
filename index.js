@@ -16,6 +16,7 @@ const cookieParser = require('cookie-parser');
 app.use(cors({
   origin: [
     'https://careease-laundary.vercel.app',
+    'https://dancing-mermaid-6757f5.netlify.app',
     'http://localhost:3000'
   ],
   credentials: true
