@@ -180,4 +180,14 @@ router.post('/admin/delivery-boy-profile', authenticateToken, isAdmin, async (re
     res.status(200).json({ message: 'Delivery boy profile saved', profile });
 });
 
+// Get delivery boy profile by delivery boy userId (admin only)
+router.get('/admin/delivery-boy-profile/:userId', authenticateToken, isAdmin, async (req, res) => {
+    const { userId } = req.params;
+    const profile = await DeliveryBoyProfile.findOne({ userId });
+    if (!profile) {
+        return res.status(404).json({ message: 'Profile not found' });
+    }
+    res.json({ profile });
+});
+
 module.exports = router;

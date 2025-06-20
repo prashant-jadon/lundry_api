@@ -3,6 +3,7 @@ const { User } = require('../../models/Users');
 const { Order } = require('../../models/OrderSchema');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const DeliveryBoyProfile = require('../../models/DeliveryBoyProfile');
 
 const router = express.Router();
 
@@ -66,6 +67,20 @@ router.put('/delivery/orders/:orderId/status', authenticateToken, isDeliveryBoy,
         return res.status(404).json({ message: 'Order not found or not assigned to you' });
     }
     res.json({ message: 'Order status updated', order });
+});
+
+// Get delivery boy profile by delivery boy userId
+router.get('/delivery/profile/:userId', authenticateToken, isDeliveryBoy, async (req, res) => {
+    const { userId } = req.params;
+    // Only allow delivery boy to fetch their own profile
+    if (req.user.userId !== userId) {
+        return res.status(403).json({ message: 'Forbidden: You can only access your own profile' });
+    }
+    const profile = await DeliveryBoyProfile.findOne({ userId });
+    if (!profile) {
+        return res.status(404).json({ message: 'Profile not found' });
+    }
+    res.json({ profile });
 });
 
 module.exports = router;

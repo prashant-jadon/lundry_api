@@ -911,6 +911,49 @@ Authorization: Bearer <admin_jwt_token>
 
 ---
 
+### 13. **View Delivery Boy Profile by UserId (Admin Only)**
+
+**GET** `/api/admin/delivery-boy-profile/:userId`
+
+**Headers:**
+```
+Authorization: Bearer <admin_jwt_token>
+```
+
+**Example Request:**
+```
+GET /api/admin/delivery-boy-profile/665f4e7e2f8b2c0012a4e999
+```
+
+**Success Response:**
+```json
+{
+  "profile": {
+    "_id": "665f4e7e2f8b2c0012a4eabc",
+    "userId": "665f4e7e2f8b2c0012a4e999",
+    "firstname": "Ravi",
+    "lastname": "Kumar",
+    "email": "ravi.delivery@example.com",
+    "phone": "9876543210",
+    "address": "456 Delivery Lane",
+    "pincode": "110002",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "createdAt": "2025-06-19T12:34:56.789Z",
+    "__v": 0
+  }
+}
+```
+
+**Error Response:**
+```json
+{
+  "message": "Profile not found"
+}
+```
+
+---
+
 # CareEase Delivery Boy API
 
 This API allows delivery boys to log in, view their assigned orders, and update the delivery status of orders.
