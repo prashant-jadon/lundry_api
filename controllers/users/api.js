@@ -93,7 +93,7 @@ router.post('/login', async (req, res) => {
     // Set token in cookie for Next.js (httpOnly, secure in production)
 res.cookie('token', token, {
     httpOnly: true,
-    secure: false, // required for SameSite=None
+    secure: true, // required for SameSite=None
     sameSite: 'none', // allow cross-site
     domain: '.vercel.app', // or your custom domain
     path: '/',
@@ -128,9 +128,11 @@ router.get('/pricing', async (req, res) => {
 // Logout API
 router.post('/logout', (req, res) => {
     res.clearCookie('token', {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax'
+         httpOnly: true,
+    secure: true, // required for SameSite=None
+    sameSite: 'none', // allow cross-site
+    domain: '.vercel.app', // or your custom domain
+    path: '/',
     });
     res.status(200).json({ message: 'Logged out successfully' });
 });
