@@ -91,12 +91,15 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign({ userId: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
 
     // Set token in cookie for Next.js (httpOnly, secure in production)
-   res.cookie('token', token, {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+res.cookie('token', token, {
+  httpOnly: false,
+  secure: true,
+  sameSite: 'none',
   path: '/',
 });
+
+res.setHeader('Access-Control-Allow-Credentials', 'true');
+
 
 
     // Check if profile exists
@@ -125,10 +128,11 @@ router.get('/pricing', async (req, res) => {
     res.json(pricing.getPricing());
 });
 
+
 // Logout API
 router.post('/logout', (req, res) => {
     res.clearCookie('token', {
-         httpOnly: true,
+         httpOnly: false,
     secure: true, // required for SameSite=None
     sameSite: 'none', // allow cross-site
    
